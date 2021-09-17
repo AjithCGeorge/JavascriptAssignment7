@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div style="width:100%; height:100px; border:2px solid black">
+    <h1 align="center">Application Form</h1>
+</div>
+
+<div style="padding:50px 50px">
+  <form  method="post">
+      <table>
+         <tr style="height:60px">
+             <td><label for="email" style="font-weight:bold">Enter your Name:</label></td>
+             <td> <input style="" type="text" name="fname" required></td>
+         </tr>
+         <tr style="height:60px">
+             <td><label for="email">Enter your email:</label></td>
+             <td><input type="email" style="" id="email" name="email"></td>
+         </tr><br>
+         <tr style="height:60px">
+             <td><label for="email">Select your Country:</label></td>
+             <td><select id="countryList" name="country" onchange="regionFn()">
+                 <option selected="true" disabled>Choose Country</option>
+                    </select>
+             </td>
+         </tr>
+         <tr style="height:60px">
+             <td><label for="email">Select your Region:</label></td>
+             <td><select id="regionList" name="country">
+          <option selected="true" disabled>Choose Region/State/Province</option>
+        </select></td>
+         </tr>
+        <tr style="height:60px">
+            <td><input type="submit" value="Submit"></td>
+        </tr>
+      </table>
+    </form>
+</div>
+<div id="demo">
+
+</div>
+
+<script>
+let s = document.createElement("script");
+s.src = "https://battuta.medunes.net/api/country/all/?key=7202d864c4a3bef800ca5fe99158a618&callback=country";
+document.body.appendChild(s);
+
+function country(myObj)
+{
+        var dropList = document.getElementById('countryList')
+        for (var i = 0; i < myObj.length; i++)
+        {
+            var row=` <option value=${myObj[i].code}>${myObj[i].name}</option>`
+            dropList.innerHTML += row
+        }
+}
+function regionFn()
+    {
+        var battuttaKey = "19af8268ee045855bbf332402b7e75f9";
+        var e = document.getElementById("countryList");
+        var cCode=e.value;
+        var url1= "https://battuta.medunes.net/api/region/"+cCode+"/all/"+"?key="+battuttaKey+"&callback=?";
+
+
+            $.getJSON(url1, function(data, status)
+                {
+
+                    var x=data;
+                    console.log(data);
+                    buildRegion()
+
+            function buildRegion()
+            {
+                var dropList = document.getElementById('regionList')
+                for (var i = 0; i < x.length; i++)
+                    {
+                    var row2=` <option value=${x[i].region}>${x[i].region}</option>`
+                    dropList.innerHTML += row2
+                    }
+            }
+        });
+    }
+
+
+
+</script>
+
+
+</body>
+</html>
